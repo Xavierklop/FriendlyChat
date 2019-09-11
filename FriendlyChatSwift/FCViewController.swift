@@ -70,7 +70,7 @@ class FCViewController: UIViewController, UINavigationControllerDelegate {
     }
     
     func configureDatabase() {
-        // TODO: configure database to sync messages
+        ref = Database.database().reference()
     }
     
     func configureStorage() {
