@@ -157,7 +157,6 @@ class FCViewController: UIViewController, UINavigationControllerDelegate {
     
     func sendPhotoMessage(photoData: Data) {
         // build a path using the user’s ID and a timestamp
-        print("\nreached sendPhotoMessage\n")
         let imagePath = "chat_photos/" + Auth.auth().currentUser!.uid + "/\(Double(Date.timeIntervalSinceReferenceDate * 1000)).jpg"
         // set content type to “image/jpeg” in firebase storage metadata
         let metadata = StorageMetadata()
@@ -166,11 +165,9 @@ class FCViewController: UIViewController, UINavigationControllerDelegate {
         storageRef!.child(imagePath).putData(photoData, metadata: metadata) { (metadata, error) in
             if let error = error {
                 print("Error uploading: \(error)")
-                print("\nnot reached send photo message!!!!\n")
                 return
             }
             // use sendMessage to add imageURL to database
-            print("reached to send photo message")
             self.sendMessage(data: [Constants.MessageFields.imageUrl: self.storageRef!.child((metadata?.path)!).description])
         }
     }
@@ -252,13 +249,32 @@ extension FCViewController: UITableViewDelegate, UITableViewDataSource {
         let messageSnapshot: DataSnapshot! = messages[indexPath.row]
         let message = messageSnapshot.value as! [String : String]
         let name = message[Constants.MessageFields.name] ?? "[username]"
-        let text = message[Constants.MessageFields.text] ?? "[message]"
         
-        cell.textLabel?.text = name + ": " + text
-        cell.imageView?.image = self.placeholderImage
-        
+        // if photo message, then grab image and display it
+        if let imageUrl = message[Constants.MessageFields.imageUrl] {
+            cell!.textLabel?.text = "sent by: \(name)"
+            // download and display image
+            Storage.storage().reference(forURL: imageUrl).getData(maxSize: INT64_MAX) { (data, error) in
+                guard error == nil else {
+                    print("error downloading, error is \(error!.localizedDescription)")
+                    return
+                }
+                let messageImage = UIImage(data: data!, scale: 50)
+                // check if the cell is still on screen, if so, update cell image
+                if cell == tableView.cellForRow(at: indexPath) {
+                    DispatchQueue.main.async {
+                        cell.imageView?.image = messageImage
+                        cell.setNeedsLayout()
+                    }
+                }
+            }
+        } else {
+            // if no message image, update cell for regular message
+            let text = message[Constants.MessageFields.text] ?? "[message]"
+            cell.textLabel?.text = name + ": " + text
+            cell.imageView?.image = self.placeholderImage
+        }
         return cell!
-        // TODO: update cell to display message data
     }
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -304,11 +320,8 @@ extension FCViewController: UIImagePickerControllerDelegate {
                 // constant to hold the information about the photo
                 if let photo = info[UIImagePickerController.InfoKey.originalImage] as? UIImage, let photoData = photo.jpegData(compressionQuality: 0.8) {
                     // call function to upload photo message
-                    // test
-                    print("\nreched imagePickerController() and get photoData\n")
                     sendPhotoMessage(photoData: photoData)
                 }
-                print("\nreched imagePickerController() but no photoData!!!!!!\n")
                 picker.dismiss(animated: true, completion: nil)
     }
     
