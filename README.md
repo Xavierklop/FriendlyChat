@@ -1,11 +1,13 @@
 # FriendlyChat
-A chat app use firebase
+A chat app use firebase that allows users to chat with friends in real-time and send texts and photo messages. Users can login with regilar email or with Google account.
 ## Prerequisites
 Xcode 10.2+
 
 Swift 5+
 
 iOS 11.0+
+
+Firebase
 ## Installing
 `git clone xxxx`
 ## Overview
