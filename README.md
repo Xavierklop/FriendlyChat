@@ -8,8 +8,10 @@ Swift 5+
 iOS 11.0+
 
 Firebase
+
+CocoaPads
 ## Installing
-`git clone xxxx`
+`git clone https://github.com/Xavierklop/FriendlyChat.git`
 ## Overview
 The following features are provided by this app:
 
@@ -17,7 +19,11 @@ The following features are provided by this app:
 ### Main View controllers
 #### RootViewController
 ## Technical features
-- Use Itunes Firebase
+- Use Firebase Realtime Database to storge text infomation.
+- Use Firebase Authentication provide a way to use email/password and Google account sign-in.
+- Use FirebaseUI implement email/password and Google account sign-in page.
+- Use Firebase Storage to storage image only if it is less than 3 MB.
+- Use Firebase Analytics to automatically collects a handful of events of app.
 ## License
 This code may be used free of cost for a non-commercial purpose, provided the intended usage is notified to the owner via the below email address.
 Any questions, please email wuhaocll@gmail.com
