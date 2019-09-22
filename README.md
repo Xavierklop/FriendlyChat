@@ -15,13 +15,16 @@ CocoaPads
 ## Overview
 The following features are provided by this app:
 
- 1. 
+ 1. Login by email/password or Google account.
+ 2. Send and receive texts or image.
+ 3. Tap a image message to see a larger version of a image. 
 ### Main View controllers
-#### RootViewController
+#### FCViewController
+Users can send and and receive texts or image in FCViewController. Users can tap a image message to see a larger version of a image.
 ## Technical features
 - Use Firebase Realtime Database to storge text infomation.
 - Use Firebase Authentication provide a way to use email/password and Google account sign-in.
-- Use FirebaseUI implement email/password and Google account sign-in page.
+- Use FirebaseUI implement email/password and Google account sign-in UI.
 - Use Firebase Storage to storage image only if it is less than 3 MB.
 - Use Firebase Analytics to automatically collects a handful of events of app.
 ## License
